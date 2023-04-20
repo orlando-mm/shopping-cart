@@ -7,41 +7,38 @@ export const useProductsStore = defineStore('products', () => {
     const cart = ref({});
 
     /* MUTATIONS */
-    function setProducts(arrayProducts) {
+    const setProducts = (arrayProducts)=> {
         products.value = arrayProducts;
     }
-    function storeCart() {
-        localStorage.cart = JSON.stringify(cart.value)
+    const storeCart = ()=> {
+        localStorage.cart = JSON.stringify(cart.value);
     }
-    function resetStoreCart() {
-        localStorage.removeItem('cart')
+    const resetStoreCart = () => {
+        localStorage.removeItem('cart');
     }
-    function loadStoreCart() {
+    const loadStoreCart = () => {
         if (!Object.keys(cart.value).length && localStorage.getItem('cart')) {
-            cart.value = JSON.parse(localStorage.cart)
+            cart.value = JSON.parse(localStorage.cart);
         }
     }
-    function setCart(objProduct) {
+    const setCart = (objProduct) => {
         cart.value[objProduct.id] = objProduct;
-        storeCart()
+        storeCart();
     }
-    function resetCart() {
+    const resetCart = () => {
         cart.value = {};
-        resetStoreCart()
+        resetStoreCart();
     }
-    function subtractQuantity(idProduct) {
+    const subtractQuantity = (idProduct) => {
         cart.value[idProduct].amount = cart.value[idProduct].amount - 1;
         if(cart.value[idProduct].amount === 0) {
             delete cart.value[idProduct];
         }
-        storeCart()
-    }
-    function setProduct(idProduct) {
-
+        storeCart();
     }
 
     /* ACTIONS */
-    async function fetchProducts() {
+    const fetchProducts = async () => {
         try {
             const res = await fetch('https://fakestoreapi.com/products'); // @todo Cambiar a 'api.json' si deja de estar disponible!
             const data = await res.json();
@@ -50,7 +47,7 @@ export const useProductsStore = defineStore('products', () => {
             console.log(error);
         }
     }
-    function addToCart(objProduct) {
+    const addToCart = (objProduct) => {
         cart.value.hasOwnProperty(objProduct.id)
             ? objProduct.amount = cart.value[objProduct.id].amount + 1
             : objProduct.amount = 1;
