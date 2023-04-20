@@ -10,17 +10,31 @@ export const useProductsStore = defineStore('products', () => {
     function setProducts(arrayProducts) {
         products.value = arrayProducts;
     }
+    function storeCart() {
+        localStorage.cart = JSON.stringify(cart.value)
+    }
+    function resetStoreCart() {
+        localStorage.removeItem('cart')
+    }
+    function loadStoreCart() {
+        if (!Object.keys(cart.value).length && localStorage.getItem('cart')) {
+            cart.value = JSON.parse(localStorage.cart)
+        }
+    }
     function setCart(objProduct) {
         cart.value[objProduct.id] = objProduct;
+        storeCart()
     }
     function resetCart() {
         cart.value = {};
+        resetStoreCart()
     }
     function subtractQuantity(idProduct) {
         cart.value[idProduct].amount = cart.value[idProduct].amount - 1;
         if(cart.value[idProduct].amount === 0) {
             delete cart.value[idProduct];
         }
+        storeCart()
     }
     function setProduct(idProduct) {
 
@@ -47,5 +61,5 @@ export const useProductsStore = defineStore('products', () => {
     const totalProductsAmount = computed(() => Object.values(cart.value).reduce((count,{amount}) => count + amount, 0));
     const totalPrice = computed(() => Object.values(cart.value).reduce((count,{amount, price}) => count + (amount * price), 0));
 
-    return { products, fetchProducts, cart, addToCart, totalProductsAmount, totalPrice, resetCart, subtractQuantity }
+    return { products, fetchProducts,loadStoreCart, cart, addToCart, totalProductsAmount, totalPrice, resetCart, subtractQuantity }
 })

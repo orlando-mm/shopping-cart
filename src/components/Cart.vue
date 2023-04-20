@@ -5,10 +5,15 @@ import ProductCard from "@/components/ProductCard.vue";
 import CartSlotCard from "@/components/CartSlotCard.vue";
 import AppAlert from "@/components/AppAlert.vue";
 import CartTop from "@/components/CartTop.vue";
+import {onMounted} from "vue";
 
 
 const useProducts = useProductsStore();
 const { cart, totalProductsAmount } = storeToRefs(useProducts);
+
+onMounted(() => {
+    useProducts.loadStoreCart();
+})
 </script>
 <template>
   <div v-if="totalProductsAmount" class="pb-10">

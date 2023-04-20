@@ -7,7 +7,7 @@ import {storeToRefs} from "pinia";
 import {computed, onMounted, ref} from "vue";
 
 const useProducts = useProductsStore();
-const { products, cart } = storeToRefs(useProducts);
+const { products } = storeToRefs(useProducts);
 const loading = ref(false);
 const hasProducts = computed(() => !!products.value?.length > 0);
 
@@ -17,6 +17,7 @@ onMounted(async () => {
     await useProducts.fetchProducts();
     loading.value = false;
   }
+  useProducts.loadStoreCart();
 })
 </script>
 
